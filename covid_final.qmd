@@ -1,0 +1,45 @@
+---
+title: "covid_final"
+format: html
+theme: yeti
+editor: visual
+eval: true
+echo: false
+error: true
+---
+
+
+```{r}
+#| output: false
+
+#setting up data and library
+library(usethis)
+library(tidyverse)
+library(dplyr)
+library(gtsummary)
+library(broom)
+library(gt)
+library(here)
+#install.packages("medicaldata")
+library(medicaldata)
+
+
+usethis::use_git_config(user.name = "Samanta Biswas", user.email = "samantabiswas88@gmail.com")
+
+here::i_am("covid_final.qmd")
+
+load("covid_testing.rda")
+
+here::here("covid_testing.rda")
+
+here()
+
+```
+
+```{r}
+
+```
+
+```{r}
+
+```

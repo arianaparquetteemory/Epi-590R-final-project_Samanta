@@ -2,6 +2,6 @@
 
 This repository belongs to Samanta Biswas 
 <<<<<<< HEAD
-this is for class
+this is for Finals
 =======
 
