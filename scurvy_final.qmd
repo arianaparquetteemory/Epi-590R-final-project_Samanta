@@ -1,0 +1,31 @@
+---
+title: "final project - scurvy"
+format: html
+theme: yeti
+editor: visual
+eval: true
+echo: false
+error: true
+---
+
+```{r}
+#| output: false
+
+#setting up data and library
+library(usethis)
+library(tidyverse)
+library(gtsummary)
+library(here)
+library(broom)
+library(gt)
+library(dplyr)
+
+
+usethis::use_git_config(user.name = "Samanta Biswas", user.email = "samantabiswas88@gmail.com")
+
+load("Data/scurvy.rda")
+
+
+
+
+```
