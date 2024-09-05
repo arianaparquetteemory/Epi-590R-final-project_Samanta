@@ -41,14 +41,13 @@ getwd()
 
 ```{r}
 
-#table of descriptive summary
-
+#table of descriptive summary and labeling a table
 
 #| label: tbl-one
-#| tbl-cap: "Table 1. Descriptive stats "
-knitr::kable(covid_testing, caption = "Table 1. Descriptive stats")
+#| tbl-cap: "Table 1. Descriptive stats"
+#| output-location: slide
 
-tbl_summary(
+covid_tab <- tbl_summary(
   covid_testing,
   by = gender,
   include = c(age, gender, result, drive_thru_ind, orderset, demo_group, payor_group, col_rec_tat, rec_ver_tat),
@@ -64,12 +63,18 @@ tbl_summary(
 	missing_text = "Missing",
   statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")) |>
 	bold_labels() |> 
-  modify_footnote(update = everything() ~ NA) |> 
+  modify_footnote(everything() ~ NA) |> 
   modify_header(label = "**Variable**")
 
+covid_tab
+knitr::kable(covid_tab)
+#, caption="Table 1. Descriptive stats")
 
 
-# I tried adding median of the continuous variables by listing but it is showing similar values for male and female
+# I tried adding median of the continuous variables by listing but it is showing similar values for male and female. Slso cant ssem to caption it
+```
+
+```{r}
 
 
 
@@ -80,7 +85,7 @@ tbl_summary(
 
 # Fitting a regression
 
-ct_result <- tbl_uvregression(
+ct_reg <- tbl_uvregression(
   covid_testing, 
   y = ct_result,
   include = c(gender, result, demo_group, payor_group, col_rec_tat, rec_ver_tat),
@@ -89,6 +94,7 @@ ct_result <- tbl_uvregression(
 linear_model <- lm(ct_result ~ gender + result + drive_thru_ind + orderset + demo_group + payor_group + col_rec_tat + rec_ver_tat, 
                    data = covid_testing)
 
+#Doesn't work when i try to rename the variables
 
 
 ```
@@ -109,9 +115,14 @@ label = list(
     col_rec_tat ~ "Time between specimen collection and lab receipt", 
     rec_ver_tat ~ "Time between lab receipt and testing"))
 
+#labeling a table
+
+#| label: tbl-two
+#| tbl-cap: "Table 2. Regression table"
+knitr::kable(, caption="Regression table")
+
+# the table disappears if i try to caption it
 ```
-
-
 
 
 ```{r}
@@ -124,13 +135,29 @@ stats
 
 ```
 
+```{r}
+# a new function - ?? object not found
 
+ func <- function(col_rec_tat, rec_ver_tat = default_val)
+ {n <- length(x)
+total_hours <- sum (col_rec_tat + rec_ver_tat)
+return(total_hours)
+ }
+
+x <- c(col_rec_tat, rec_ver_tat)
+new_mean <- function(x) {
+
+}
+
+new_mean (total_hours)
+
+```
 
 ```{r}
 #figure with labeling
 
 #| label: fig-one
-#| fig-cap: "Fig 1. Histogram of Age "
+#| fig-cap: "Fig 1. Histogram of Age"
 knitr::kable(covid_testing)
 hist(covid_testing$age, main="Histogram of Age", xlab="Age", col="lightblue", border="black") 
 
@@ -138,13 +165,11 @@ hist(covid_testing$age, main="Histogram of Age", xlab="Age", col="lightblue", bo
 ```
 
 
-# Inline R text
-There are `r stats$n` participants with a mean age of `r stats$mean_age)`
+# Inline R text and cross-referencing:
 
-There were `r nrow(covid_testing)` participants with a mean age of `r mean(covid_testing$age)`
+Source: This data set is from Amrom E. Obstfeld, who de-identified data on COVID-19 testing during 2020 at CHOP (Children’s Hospital of Pennsylvania). The data has been anonymized, time-shifted, and permuted. It is from a Prospective Cross-Sectional Cohort where 15,524 participants were tested, from day 4 to day 107 of the COVID-19 pandemic. This data set contains data concerning testing for SARS-CoV2 via PCR as well as associated metadata (17 variables). 
 
-`r inline_text(ct_result_table, variable = "ct_result")`
+There are `r stats$n` participants with a mean age of `r stats$mean_age` or There were `r nrow(covid_testing)` participants with a mean age of `r mean(covid_testing$age)`. We plotted the histogram of age in @fig-one. However, @tbl-one shows similar median age for both men and women: `r inline_text(table1, variable = "age")`
+ 
 
-#| label: tbl-one
-#| tbl-cap: "Table 1. Descriptive stats "
-knitr::kable(covid_testing, caption = "Table 1. Descriptive stats")
+
