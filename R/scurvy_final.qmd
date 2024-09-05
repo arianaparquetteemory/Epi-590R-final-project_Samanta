@@ -1,11 +1,11 @@
 ---
 title: "final project - scurvy"
 format: html
+theme: yeti
 editor: visual
 eval: true
 echo: false
 error: true
-
 ---
 
 ```{r}
@@ -18,33 +18,23 @@ library(gtsummary)
 library(here)
 library(broom)
 library(gt)
-
-#here statement to save dataset as csv as the working directory
-working_dir <- here::here("data")
+library(dplyr)
 
 
+usethis::use_git_config(user.name = "Samanta Biswas", user.email = "samantabiswas88@gmail.com")
+
+setwd("C:/Users/saman/OneDrive - Emory University/3 Coursework - Fall 2024/EPI seminar 590R - R bootcamp/epi590R_in class/Epi 590R final project_samanta/R")
+
+load("scurvy.rda")
+
+ls()
+
+
+#here statement to save dataset as csv in the working directory
+working_dir <- here::here("Data")
+
+getwd()
 
 
 
-
-
-## Quarto
-
-Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
-
-## Running Code
-
-When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
-
-```{r}
-1 + 1
 ```
-
-You can add options to executable code like this
-
-```{r}
-#| echo: false
-2 * 2
-```
-
-The `echo: false` option disables the printing of code (only output is displayed).
