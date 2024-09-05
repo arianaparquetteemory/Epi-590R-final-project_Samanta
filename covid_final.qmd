@@ -34,12 +34,117 @@ here::here("covid_testing.rda")
 
 here()
 
+getwd()
+
+
 ```
 
 ```{r}
 
+#table of descriptive summary
+
+
+#| label: tbl-one
+#| tbl-cap: "Table 1. Descriptive stats "
+knitr::kable(covid_testing, caption = "Table 1. Descriptive stats")
+
+tbl_summary(
+  covid_testing,
+  by = gender,
+  include = c(age, gender, result, drive_thru_ind, orderset, demo_group, payor_group, col_rec_tat, rec_ver_tat),
+    label = list(
+    age ~ "Age during specimen collection",
+    result ~ "Covid test result",
+    drive_thru_ind ~ "Collected via a drive-thru site", 
+    orderset ~ "Collected via a orderset",
+    demo_group ~ "Type of subject",
+    payor_group ~ "Bill payor",
+    col_rec_tat ~ "Time between specimen collection and lab receipt", 
+    rec_ver_tat ~ "Time between lab receipt and testing"),
+	missing_text = "Missing",
+  statistic = list(all_continuous() ~ "{median} ({p25}, {p75})", all_categorical() ~ "{n} ({p}%)")) |>
+	bold_labels() |> 
+  modify_footnote(update = everything() ~ NA) |> 
+  modify_header(label = "**Variable**")
+
+
+
+# I tried adding median of the continuous variables by listing but it is showing similar values for male and female
+
+
+
+```
+
+
+```{r}
+
+# Fitting a regression
+
+ct_result <- tbl_uvregression(
+  covid_testing, 
+  y = ct_result,
+  include = c(gender, result, demo_group, payor_group, col_rec_tat, rec_ver_tat),
+  method = lm)
+    
+linear_model <- lm(ct_result ~ gender + result + drive_thru_ind + orderset + demo_group + payor_group + col_rec_tat + rec_ver_tat, 
+                   data = covid_testing)
+
+
+
 ```
 
 ```{r}
 
+# Fitting a regression
+
+tbl_regression(
+  linear_model, 
+  intercept = TRUE,
+label = list(
+    result ~ "Covid test result",
+    drive_thru_ind ~ "Collected via a drive-thru site", 
+    orderset ~ "Collected via a orderset",
+    demo_group ~ "Type of subject",
+    payor_group ~ "Bill payor",
+    col_rec_tat ~ "Time between specimen collection and lab receipt", 
+    rec_ver_tat ~ "Time between lab receipt and testing"))
+
 ```
+
+
+
+
+```{r}
+
+stats <- list(n = nrow(covid_testing),
+              mean_age = mean(covid_testing$age))
+
+stats
+
+
+```
+
+
+
+```{r}
+#figure with labeling
+
+#| label: fig-one
+#| fig-cap: "Fig 1. Histogram of Age "
+knitr::kable(covid_testing)
+hist(covid_testing$age, main="Histogram of Age", xlab="Age", col="lightblue", border="black") 
+
+
+```
+
+
+# Inline R text
+There are `r stats$n` participants with a mean age of `r stats$mean_age)`
+
+There were `r nrow(covid_testing)` participants with a mean age of `r mean(covid_testing$age)`
+
+`r inline_text(ct_result_table, variable = "ct_result")`
+
+#| label: tbl-one
+#| tbl-cap: "Table 1. Descriptive stats "
+knitr::kable(covid_testing, caption = "Table 1. Descriptive stats")
